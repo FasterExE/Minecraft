@@ -1,4 +1,4 @@
 # SETUP COMMAND
 ```
-wget https://github.com/FasterExE/SSL-Certificate/raw/main/certificate.sh; bash certificate.sh
+wget https://github.com/FasterExE/Minecraft/raw/refs/heads/main/install.sh; bash install.sh
 ```
