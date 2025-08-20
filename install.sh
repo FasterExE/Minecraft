@@ -1,6 +1,6 @@
 #!/bin/bash
-# Minecraft Java Server Installer - By Ilyass
-# يدعم Java 21 و systemd
+# Minecraft Java Server Installer vFinal - By Ilyass
+# Java 21 + 1.21.8 + Offline mode for TLauncher
 
 # تحديث النظام وتثبيت المتطلبات
 sudo apt update && sudo apt upgrade -y
@@ -17,19 +17,26 @@ sudo useradd -r -m -U -d /opt/minecraft -s /bin/bash minecraft || true
 sudo mkdir -p /opt/minecraft
 cd /opt/minecraft
 
-# تنزيل آخر نسخة من Minecraft server (تأكد الرابط من MCJars)
-sudo wget -O server.jar https://launcher.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar
+# أخذ نسخة احتياطية إذا كان السيرفر موجود
+if [ -f server.jar ]; then
+    mv server.jar server.jar.bak
+    echo "Backup old server.jar to server.jar.bak"
+fi
+
+# تنزيل آخر نسخة Minecraft 1.21.8
+sudo wget -O server.jar https://launcher.mojang.com/v1/objects/f3f7e9c8f43a9e6e5d2c1b8e4a9c5d07a7f9f71f/server.jar
 
 # قبول EULA
 echo "eula=true" | sudo tee /opt/minecraft/eula.txt
 
-# إعداد server.properties
+# إعداد server.properties مع offline-mode
 cat <<EOF | sudo tee /opt/minecraft/server.properties
 motd=THIS IS ILYASS SERVER
 enable-command-block=true
 spawn-protection=0
 view-distance=10
 max-players=20
+online-mode=false
 EOF
 
 # تغيير ملكية الملفات للمستخدم minecraft
@@ -56,5 +63,5 @@ sudo systemctl daemon-reload
 sudo systemctl enable minecraft.service
 sudo systemctl start minecraft.service
 
-echo "✅ Minecraft Server installed and running as minecraft.service"
-echo "Use 'screen -r mc' to attach to the server screen"
+echo "✅ Minecraft 1.21.8 Server installed, offline-mode enabled for TLauncher"
+echo "Use 'screen -S mc java -Xmx2G -Xms2G -jar server.jar nogui' to run manually in screen"
